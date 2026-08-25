@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Cart
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>My Cart</h2>
+
+    {% for item in items %}
+
+    <div class="card mb-3">
+
+        <div class="card-body">
+
+            <h5>{{ item.product.name }}</h5>
+
+            <p>
+                Price: ₹{{ item.product.price }}
+            </p>
+
+            <form action="/updatecart/{{ item.id }}" method="POST">
+
+                {% csrf_token %}
+
+                <input type="number"
+                       name="quantity"
+                       value="{{ item.quantity }}"
+                       min="1">
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Update
+                </button>
+
+            </form>
+
+            <p>
+                Total:
+                ₹{{ item.product.price|floatformat:2 }}
+            </p>
+
+            <a href="/removecart/{{ item.id }}"
+               class="btn btn-danger">
+                Remove
+            </a>
+
+        </div>
+
+    </div>
+
+    {% empty %}
+
+    <p>Your cart is empty.</p>
+
+    {% endfor %}
+
+    <h4>
+        Grand Total: ₹{{ total }}
+    </h4>
+
+</div>
+
+{% endblock %}
